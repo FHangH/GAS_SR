@@ -27,7 +27,10 @@ bool USR_AbilitySystemComponent::AddNewAbility(const TSubclassOf<USR_GameplayAbi
 		}
 	}
 
-	const auto AbilitySpec = FGameplayAbilitySpec(AbilityClass, Level, INDEX_NONE, this);
+	const auto AbilitySpec = FGameplayAbilitySpec
+	{
+		AbilityClass, Level, static_cast<int32>(AbilityClass.GetDefaultObject()->AbilityInputID), GetOwnerActor()
+	};
 	GiveAbility(AbilitySpec);
 	return true;
 }

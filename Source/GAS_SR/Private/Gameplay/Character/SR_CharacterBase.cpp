@@ -2,10 +2,8 @@
 #include "GAS_SR/Public/Gameplay/GAS/SR_AbilitySystemComponent.h"
 #include "GAS_SR/Public/Gameplay/GAS/Attributes/SR_AttributeSet.h"
 
-ASR_CharacterBase::ASR_CharacterBase()
+ASR_CharacterBase::ASR_CharacterBase(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
-	PrimaryActorTick.bCanEverTick = true;
-
 	AbilitySystemComponent = CreateDefaultSubobject<USR_AbilitySystemComponent>(TEXT("SR_AbilitySystemComponent"));
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
@@ -16,16 +14,6 @@ ASR_CharacterBase::ASR_CharacterBase()
 void ASR_CharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
-}
-
-void ASR_CharacterBase::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-
-void ASR_CharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
 void ASR_CharacterBase::PossessedBy(AController* NewController)
