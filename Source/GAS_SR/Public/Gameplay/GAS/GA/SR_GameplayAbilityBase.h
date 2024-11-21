@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+#include "Data/SR_AbilityTypes.h"
 #include "Data/SR_Types.h"
 #include "SR_GameplayAbilityBase.generated.h"
 
@@ -19,4 +20,7 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="A_SR")
 	bool IsAutoActivate { false };
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="A_SR")
+	TMap<FGameplayTag, FSR_GameplayEffectContainer> Map_GameplayEffectContainer;
 };

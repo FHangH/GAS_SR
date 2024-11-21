@@ -27,10 +27,148 @@ bool USR_AbilitySystemComponent::AddNewAbility(const TSubclassOf<USR_GameplayAbi
 		}
 	}
 
+	const auto InLevel = FMath::Clamp(Level, 0, Level);
 	const auto AbilitySpec = FGameplayAbilitySpec
 	{
-		AbilityClass, Level, static_cast<int32>(AbilityClass.GetDefaultObject()->AbilityInputID), GetOwnerActor()
+		AbilityClass, InLevel, static_cast<int32>(AbilityClass.GetDefaultObject()->AbilityInputID), GetOwnerActor()
 	};
-	GiveAbility(AbilitySpec);
+
+	if (IsOwnerActorAuthoritative())
+	{
+		GiveAbility(AbilitySpec);
+		Map_AbilitySpec.Add(AbilityClass.GetDefaultObject()->AbilityName, FindAbilitySpecFromClass(AbilityClass));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("AbilitySystemComponent::AddNewAbility - Ability not given on client"));
+		return false;
+	}
 	return true;
+}
+
+bool USR_AbilitySystemComponent::RemoveAbilityByClass(const TSubclassOf<USR_GameplayAbilityBase> AbilityClass)
+{
+	if (AbilityClass && IsOwnerActorAuthoritative())
+	{
+		if (const auto AbilitySpec = FindAbilitySpecFromClass(AbilityClass))
+		{
+			ClearAbility(AbilitySpec->Handle);
+			
+			for (const auto& AbilitySpecPair : Map_AbilitySpec)
+			{
+				if (AbilitySpecPair.Value->Ability->GetClass() == AbilityClass)
+				{
+					Map_AbilitySpec.Remove(AbilitySpecPair.Key);
+				}
+			}
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("AbilitySystemComponent::RemoveAbilityByClass - Ability not removed on client"));
+		return false;
+	}
+	return true;
+}
+
+bool USR_AbilitySystemComponent::RemoveAbilityByName(const FString& AbilityName)
+{
+	if (!AbilityName.IsEmpty() && IsOwnerActorAuthoritative() && IsHasAbility(AbilityName))
+	{
+		if (const auto AbilitySpec = *Map_AbilitySpec.Find(AbilityName))
+		{
+			ClearAbility(AbilitySpec->Handle);
+			Map_AbilitySpec.Remove(AbilityName);
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("AbilitySystemComponent::RemoveAbilityByName - Ability not removed on client"));
+		return false;
+	}
+	return true;
+}
+
+int32 USR_AbilitySystemComponent::GetAbilityLevelByClass(const TSubclassOf<USR_GameplayAbilityBase> AbilityClass)
+{
+	if (const auto AbilitySpec = FindAbilitySpecFromClass(AbilityClass))
+	{
+		return AbilitySpec->Level <= 0 ? -1 : AbilitySpec->Level;
+	}
+	return -1;
+}
+
+int32 USR_AbilitySystemComponent::GetAbilityLevelByName(const FString& AbilityName)
+{
+	if (IsHasAbility(AbilityName))
+	{
+		return (*Map_AbilitySpec.Find(AbilityName))->Level <= 0 ? -1 : (*Map_AbilitySpec.Find(AbilityName))->Level;
+	}
+	return -1;
+}
+
+void USR_AbilitySystemComponent::UpgradeAbilityByClass(const TSubclassOf<USR_GameplayAbilityBase> AbilityClass, const int32 UpLevel)
+{
+	/*// 教程的写法
+	for (auto& Spec : Map_AbilitySpec)
+	{
+		if (Spec.Value->Ability->GetClass() == AbilityClass)
+		{
+			Spec.Value->Level += UpLevel;
+			MarkAbilitySpecDirty(*Spec.Value);
+		}
+	}*/
+
+	// 自己的写法
+	if (const auto Spec = FindAbilitySpecFromClass(AbilityClass))
+	{
+		Spec->Level += UpLevel;
+		MarkAbilitySpecDirty(*Spec);
+	}
+}
+
+void USR_AbilitySystemComponent::UpgradeAbilityByName(const FString& AbilityName, const int32 UpLevel)
+{
+	if (IsHasAbility(AbilityName))
+	{
+		/*// 教程的写法
+		const auto Spec = *Map_AbilitySpec.Find(AbilityName);
+		Spec->Level += UpLevel;
+		MarkAbilitySpecDirty(*Spec);*/
+
+		// 自己的写法
+		for (auto& Spec : GetActivatableAbilities())
+		{
+			if (Spec.Ability->GetClass()->GetDefaultObject<USR_GameplayAbilityBase>()->AbilityName == AbilityName)
+			{
+				Spec.Level += UpLevel;
+				MarkAbilitySpecDirty(Spec);
+			}
+		}
+	}
+}
+
+void USR_AbilitySystemComponent::Server_AddNewAbility_Implementation(const TSubclassOf<USR_GameplayAbilityBase> AbilityClass, const int32 Level)
+{
+	AddNewAbility(AbilityClass, Level);
+}
+
+void USR_AbilitySystemComponent::Server_RemoveAbilityByClass_Implementation(const TSubclassOf<USR_GameplayAbilityBase> AbilityClass)
+{
+	RemoveAbilityByClass(AbilityClass);
+}
+
+void USR_AbilitySystemComponent::Server_RemoveAbilityByName_Implementation(const FString& AbilityName)
+{
+	RemoveAbilityByName(AbilityName);
+}
+
+void USR_AbilitySystemComponent::Server_UpgradeAbilityByClass_Implementation(const TSubclassOf<USR_GameplayAbilityBase> AbilityClass, const int32 UpLevel)
+{
+	UpgradeAbilityByClass(AbilityClass, UpLevel);
+}
+
+void USR_AbilitySystemComponent::Server_UpgradeAbilityByName_Implementation(const FString& AbilityName, const int32 UpLevel)
+{
+	UpgradeAbilityByName(AbilityName, UpLevel);
 }

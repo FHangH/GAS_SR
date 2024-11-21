@@ -29,4 +29,41 @@ protected:
 public:
 	UFUNCTION(BlueprintCallable, Category="SR|GAS|ASC")
 	bool AddNewAbility(TSubclassOf<USR_GameplayAbilityBase> AbilityClass, const int32 Level);
+	
+	UFUNCTION(BlueprintCallable, Category="SR|GAS|ASC")
+	bool RemoveAbilityByClass(TSubclassOf<USR_GameplayAbilityBase> AbilityClass);
+	
+	UFUNCTION(BlueprintCallable, Category="SR|GAS|ASC")
+	bool RemoveAbilityByName(const FString& AbilityName);
+
+	UFUNCTION(BlueprintPure, Category="SR|GAS|ASC")
+	FORCEINLINE bool IsHasAbility(const FString& AbilityName) const { return Map_AbilitySpec.Contains(AbilityName); }
+
+	UFUNCTION(BlueprintPure, Category="SR|GAS|ASC")
+	int32 GetAbilityLevelByClass(TSubclassOf<USR_GameplayAbilityBase> AbilityClass);
+	
+	UFUNCTION(BlueprintPure, Category="SR|GAS|ASC")
+	int32 GetAbilityLevelByName(const FString& AbilityName);
+
+	UFUNCTION(BlueprintCallable, Category="SR|GAS|ASC")
+	void UpgradeAbilityByClass(TSubclassOf<USR_GameplayAbilityBase> AbilityClass, const int32 UpLevel = 1);
+
+	UFUNCTION(BlueprintCallable, Category="SR|GAS|ASC")
+	void UpgradeAbilityByName(const FString& AbilityName, const int32 UpLevel = 1);
+
+	// RPC
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category="SR|GAS|ASC")
+	void Server_AddNewAbility(TSubclassOf<USR_GameplayAbilityBase> AbilityClass, const int32 Level);
+
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category="SR|GAS|ASC")
+	void Server_RemoveAbilityByClass(TSubclassOf<USR_GameplayAbilityBase> AbilityClass);
+
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category="SR|GAS|ASC")
+	void Server_RemoveAbilityByName(const FString& AbilityName);
+
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category="SR|GAS|ASC")
+	void Server_UpgradeAbilityByClass(TSubclassOf<USR_GameplayAbilityBase> AbilityClass, const int32 UpLevel = 1);
+
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category="SR|GAS|ASC")
+	void Server_UpgradeAbilityByName(const FString& AbilityName, const int32 UpLevel = 1);
 };

@@ -1,11 +1,15 @@
 ﻿#include "GAS_SR/Public/Gameplay/Character/SR_HeroBase.h"
 #include "Camera/CameraComponent.h"
 #include "Data/SR_Types.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Gameplay/GAS/SR_AbilitySystemComponent.h"
 
 ASR_HeroBase::ASR_HeroBase(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
+	bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
 	SpringArmComponent->SetupAttachment(RootComponent);
 	SpringArmComponent->SetUsingAbsoluteRotation(true);
