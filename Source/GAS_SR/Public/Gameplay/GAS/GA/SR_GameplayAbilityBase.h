@@ -11,6 +11,7 @@ class GAS_SR_API USR_GameplayAbilityBase : public UGameplayAbility
 {
 	GENERATED_BODY()
 
+	/* Property */
 public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="A_SR")
 	FString AbilityName {};
@@ -23,4 +24,18 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="A_SR")
 	TMap<FGameplayTag, FSR_GameplayEffectContainer> Map_GameplayEffectContainer;
+
+	/* Function */
+public:
+	UFUNCTION(BlueprintCallable, Category="A_SR|Ability")
+	virtual TArray<FActiveGameplayEffectHandle> ApplyGameplayEffectContainerSpec(const FSR_GameplayEffectContainerSpec& ContainerSpec);
+
+	UFUNCTION(BlueprintCallable, Category="A_SR|Ability", meta=(AutoCreateRefTerm="EventData"))
+	virtual FSR_GameplayEffectContainerSpec MakeGameplayEffectContainerSpecFromContainer(const FSR_GameplayEffectContainer& Container, const FGameplayEventData& EventData, int32 OverrideGameplayLevel = -1);
+
+	UFUNCTION(BlueprintCallable, Category="A_SR|Ability", meta=(AutoCreateRefTerm="EventData"))
+	virtual FSR_GameplayEffectContainerSpec MakeGameplayEffectContainerSpec(FGameplayTag ContainerTag, const FGameplayEventData& EventData, int32 OverrideGameplayLevel = -1);
+
+	UFUNCTION(BlueprintCallable, Category="A_SR|Ability", meta=(AutoCreateRefTerm="EventData"))
+	virtual TArray<FActiveGameplayEffectHandle> ApplyGameplayEffectContainerAndApply(FGameplayTag ContainerTag, const FGameplayEventData& EventData, int32 OverrideGameplayLevel = -1);
 };
