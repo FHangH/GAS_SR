@@ -80,11 +80,31 @@
  *
  */
 
+class ASR_CharacterBase;
+
 #define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
 GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
+
+#define DAMAGE_HANDLE(Attribute,C,Name,TempDamage,TempNewHp)\
+{\
+	if(Attribute == GetDamage_##Name##Attribute()) \
+	{	\
+		TempDamage = GetDamage_##Name(); \
+		SetDamage_##Name(0);	\
+		if(TempDamage>0)	\
+		{	\
+			ASR_CharacterBase* character = Cast<ASR_CharacterBase>(C);	\
+			if (character&&character->IsAlive())\
+			{\
+				TempNewHp = GetHealth() - TempDamage;\
+			    SetHealth(TempNewHp);\
+			}\
+		}	\
+	} \
+}
 
 UCLASS()
 class GAS_SR_API USR_AttributeSet : public UAttributeSet
@@ -97,14 +117,95 @@ public:
 	FGameplayAttributeData Health { 100.f };
 	ATTRIBUTE_ACCESSORS(USR_AttributeSet, Health)
 
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_MaxHealth, Category="A_SR|Attribute")
+	FGameplayAttributeData MaxHealth;
+	ATTRIBUTE_ACCESSORS(USR_AttributeSet, MaxHealth)
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_Mana, Category="A_SR|Attribute")
+	FGameplayAttributeData Mana;
+	ATTRIBUTE_ACCESSORS(USR_AttributeSet, Mana)
+	
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_MaxMana, Category="A_SR|Attribute")
+	FGameplayAttributeData MaxMana;
+	ATTRIBUTE_ACCESSORS(USR_AttributeSet, MaxMana)
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_Attack, Category="A_SR|Attribute")
+	FGameplayAttributeData Attack;
+	ATTRIBUTE_ACCESSORS(USR_AttributeSet, Attack)
+	
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_Armor, Category="A_SR|Attribute")
+	FGameplayAttributeData Armor;
+	ATTRIBUTE_ACCESSORS(USR_AttributeSet, Armor)
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_Strength, Category="A_SR|Attribute")
+	FGameplayAttributeData Strength;
+	ATTRIBUTE_ACCESSORS(USR_AttributeSet, Strength)
+
+	//临时攻击数据, 通过技能初始化, 用于结算最终伤害
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_Attack_Physics, Category="A_SR|Attribute")
+	FGameplayAttributeData Attack_Physics;
+	ATTRIBUTE_ACCESSORS(USR_AttributeSet, Attack_Physics)
+	
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_Attack_Fire, Category="A_SR|Attribute")
+	FGameplayAttributeData Attack_Fire;
+	ATTRIBUTE_ACCESSORS(USR_AttributeSet, Attack_Fire)
+	
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_Attack_Ice, Category="A_SR|Attribute")
+	FGameplayAttributeData Attack_Ice;
+	ATTRIBUTE_ACCESSORS(USR_AttributeSet, Attack_Ice)
+
+	//临时受伤数据
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_Damage_Physics, Category="A_SR|Attribute")
+	FGameplayAttributeData Damage_Physics;
+	ATTRIBUTE_ACCESSORS(USR_AttributeSet, Damage_Physics)
+	
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_Damage_Fire, Category="A_SR|Attribute")
+	FGameplayAttributeData Damage_Fire;
+	ATTRIBUTE_ACCESSORS(USR_AttributeSet, Damage_Fire)
+	
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_Damage_Ice, Category="A_SR|Attribute")
+	FGameplayAttributeData Damage_Ice;
+	ATTRIBUTE_ACCESSORS(USR_AttributeSet, Damage_Ice)
+
 	/* Function */
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
+
+	void AdjustAttributeForMaxChange(const FGameplayAttributeData& AffectedAttribute, const FGameplayAttributeData& MaxAttribute, float NewMaxValue, const FGameplayAttribute& AffectedAttributeProperty) const;
+	void HandleSecondaryAttributeChanged(const FGameplayAttribute& Attribute);
+
+	//void HandleDamage(const FGameplayAttribute& Attribute, ASR_CharacterBase* TargetCharacter);
+	bool IsAnyDamage(const FGameplayAttribute& Attribute)const;
 	
 	// Attribute OnRep
 protected:
 	UFUNCTION()
 	void OnRep_Health(const FGameplayAttributeData& OldValue) const;
+	UFUNCTION()
+	virtual void OnRep_MaxHealth(const FGameplayAttributeData& OldValue);
+	UFUNCTION()
+	virtual void OnRep_Mana(const FGameplayAttributeData& OldValue);
+	UFUNCTION()
+	virtual void OnRep_MaxMana(const FGameplayAttributeData& OldValue);
+	UFUNCTION()
+	virtual void OnRep_Attack(const FGameplayAttributeData& OldValue);
+	UFUNCTION()
+	virtual void OnRep_Armor(const FGameplayAttributeData& OldValue);
+	UFUNCTION()
+	virtual void OnRep_Strength(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_Attack_Physics(const FGameplayAttributeData& OldValue);
+	UFUNCTION()
+	virtual void OnRep_Attack_Fire(const FGameplayAttributeData& OldValue);
+	UFUNCTION()
+	virtual void OnRep_Attack_Ice(const FGameplayAttributeData& OldValue);
+	UFUNCTION()
+	virtual void OnRep_Damage_Physics(const FGameplayAttributeData& OldValue);
+	UFUNCTION()
+	virtual void OnRep_Damage_Fire(const FGameplayAttributeData& OldValue);
+	UFUNCTION()
+	virtual void OnRep_Damage_Ice(const FGameplayAttributeData& OldValue);
 };

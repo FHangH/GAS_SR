@@ -2,7 +2,7 @@
 #include "AbilitySystemComponent.h"
 
 UAsyncTask_ListenForGEStackChanged* UAsyncTask_ListenForGEStackChanged::ListenForGEStackChanged(
-	UObject* InWorldContextObject, UAbilitySystemComponent* InASComponent, FGameplayTag InEffectGameplayTag)
+	UObject* InWorldContextObject, UAbilitySystemComponent* InASComponent, const FGameplayTag InEffectGameplayTag)
 {
 	AsyncTask = NewObject<UAsyncTask_ListenForGEStackChanged>();
 	if (AsyncTask)
@@ -60,7 +60,7 @@ void UAsyncTask_ListenForGEStackChanged::OnRemoveGameplayEffectCallback(const FA
 	}
 }
 
-void UAsyncTask_ListenForGEStackChanged::GameplayEffectStackChanged(FActiveGameplayEffectHandle EffectHandle, int32 NewStackCount, int32 PreviousStackCount)
+void UAsyncTask_ListenForGEStackChanged::GameplayEffectStackChanged(const FActiveGameplayEffectHandle EffectHandle, const int32 NewStackCount, const int32 PreviousStackCount)
 {
 	OnGameplayEffectStackChangeDelegate.Broadcast(EffectGameplayTag, EffectHandle, NewStackCount, PreviousStackCount);
 }
