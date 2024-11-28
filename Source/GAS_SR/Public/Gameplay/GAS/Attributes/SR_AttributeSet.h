@@ -118,15 +118,15 @@ public:
 	ATTRIBUTE_ACCESSORS(USR_AttributeSet, Health)
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_MaxHealth, Category="A_SR|Attribute")
-	FGameplayAttributeData MaxHealth;
+	FGameplayAttributeData MaxHealth { 100.f };
 	ATTRIBUTE_ACCESSORS(USR_AttributeSet, MaxHealth)
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_Mana, Category="A_SR|Attribute")
-	FGameplayAttributeData Mana;
+	FGameplayAttributeData Mana { 100.f };
 	ATTRIBUTE_ACCESSORS(USR_AttributeSet, Mana)
 	
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_MaxMana, Category="A_SR|Attribute")
-	FGameplayAttributeData MaxMana;
+	FGameplayAttributeData MaxMana { 100.f };
 	ATTRIBUTE_ACCESSORS(USR_AttributeSet, MaxMana)
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_Attack, Category="A_SR|Attribute")

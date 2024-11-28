@@ -17,6 +17,7 @@ protected:
 
 public:
 	bool IsHasGiveCharacterStartUpAbilities { false };
+	bool IsHasApplyStartUpEffects { false };
 	
 	/* Function */
 public:

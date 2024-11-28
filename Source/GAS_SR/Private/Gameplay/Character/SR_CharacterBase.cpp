@@ -36,6 +36,18 @@ UAbilitySystemComponent* ASR_CharacterBase::GetAbilitySystemComponent() const
 
 void ASR_CharacterBase::InitAttributes()
 {
+	if (!AbilitySystemComponent || !DefaultAttributeEffects)
+	{
+		return;
+	}
+
+	FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComponent->MakeEffectContext();
+	EffectContextHandle.AddSourceObject(this);
+	const FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DefaultAttributeEffects,1, EffectContextHandle);
+	if (SpecHandle.IsValid())
+	{
+		AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), AbilitySystemComponent);
+	}
 }
 
 void ASR_CharacterBase::AddCharacterStartUpAbilities()
@@ -52,4 +64,20 @@ void ASR_CharacterBase::AddCharacterStartUpAbilities()
 
 void ASR_CharacterBase::AddStatUpEffects()
 {
+	if (GetLocalRole() != ROLE_Authority || !AbilitySystemComponent || AbilitySystemComponent->IsHasApplyStartUpEffects)
+	{
+		return;
+	}
+
+	FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComponent->MakeEffectContext();
+	EffectContextHandle.AddSourceObject(this);
+	for (const auto GE : StartUpEffects)
+	{
+		FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GE, 1, EffectContextHandle);
+		if (SpecHandle.IsValid())
+		{
+			AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), AbilitySystemComponent);
+		}
+	}
+	AbilitySystemComponent->IsHasApplyStartUpEffects = true;
 }
