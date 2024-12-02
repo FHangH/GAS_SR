@@ -2,7 +2,9 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
+#include "Data/SR_Types.h"
 #include "GameFramework/Character.h"
+#include "Gameplay/GAS/Attributes/SR_AttributeSet.h"
 #include "SR_CharacterBase.generated.h"
 
 class UGameplayEffect;
@@ -47,4 +49,32 @@ protected:
 	virtual void InitAttributes();
 	virtual void AddCharacterStartUpAbilities();
 	virtual void AddStatUpEffects();
+
+public:
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "A_SR|Character|Handle")
+	void HandleDodge(USR_AbilitySystemComponent* SourceASC, const FSRDodgeParameter& Parameter);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "A_SR|Character|Handle")
+	void HandleDamage(USR_AbilitySystemComponent* SourceASC, const FSRDamageParameter& Parameter);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "A_SR|Character|Handle")
+	void HandleBlock(USR_AbilitySystemComponent* SourceASC, const FSRBlockParameter& Parameter);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "A_SR|Character|Handle")
+	void HandleDeath(USR_AbilitySystemComponent* SourceASC, const FSRDamageParameter& Parameter);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Status")
+	FORCEINLINE bool IsAlive() const { return GetHealth() > 0; }
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Attribute")
+	FORCEINLINE float GetHealth() const { return AttributeSet ? AttributeSet->GetHealth() : 0.f; }
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Attribute")
+	FORCEINLINE float GetMaxHealth() const { return AttributeSet ? AttributeSet->GetMaxHealth() : 0.f; }
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Attribute")
+	FORCEINLINE float GetMana() const { return AttributeSet ? AttributeSet->GetMana() : 0.f; }
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Attribute")
+	FORCEINLINE float GetMaxMana() const { return AttributeSet ? AttributeSet->GetMaxMana() : 0.f; }
 };

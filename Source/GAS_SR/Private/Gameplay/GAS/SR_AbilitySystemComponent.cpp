@@ -159,9 +159,10 @@ void USR_AbilitySystemComponent::ReceiveDodge(USR_AbilitySystemComponent* Source
 	}*/
 	
 	OnDodgeDelegate.Broadcast(SourceASC, Parameter);
-	auto Role = Cast<ASR_CharacterBase>(GetAvatarActor());
+	const auto Role = Cast<ASR_CharacterBase>(GetAvatarActor());
 	if (Role)
 	{
+		Role->HandleDodge(SourceASC, Parameter);
 	}
 }
 
@@ -174,9 +175,14 @@ void USR_AbilitySystemComponent::ReceiveDamage(USR_AbilitySystemComponent* Sourc
 	}*/
 	
 	OnDamageDelegate.Broadcast(SourceASC, Parameter);
-	auto Role = Cast<ASR_CharacterBase>(GetAvatarActor());
+	const auto Role = Cast<ASR_CharacterBase>(GetAvatarActor());
 	if (Role)
 	{
+		Role->HandleDamage(SourceASC, Parameter);
+		if (!Role->IsAlive())
+		{
+			Role->HandleDeath(SourceASC, Parameter);
+		}
 	}
 }
 
@@ -188,9 +194,10 @@ void USR_AbilitySystemComponent::ReceiveBlock(USR_AbilitySystemComponent* Source
 	}*/
 	
 	OnBlockDelegate.Broadcast(SourceASC, Parameter);
-	auto Role = Cast<ASR_CharacterBase>(GetAvatarActor());
+	const auto Role = Cast<ASR_CharacterBase>(GetAvatarActor());
 	if (Role)
 	{
+		Role->HandleBlock(SourceASC, Parameter);
 	}
 }
 

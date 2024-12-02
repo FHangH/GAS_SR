@@ -6,8 +6,8 @@
 #include "SR_AbilitySystemComponent.generated.h"
 
 class USR_GameplayAbilityBase;
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnRecieveEventDodgeSignature, USR_AbilitySystemComponent*, SourceASC,
-                                             const FSRDodgeParameter&, Parameter);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnRecieveEventDodgeSignature, USR_AbilitySystemComponent*, SourceASC, const FSRDodgeParameter&, Parameter);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnReceiveEventBlockSignature, USR_AbilitySystemComponent*, SourceASC, const FSRBlockParameter&, Parameter);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnReceiveEventDamageSignature, USR_AbilitySystemComponent*, SourceASC, const FSRDamageParameter&, Parameter);
 

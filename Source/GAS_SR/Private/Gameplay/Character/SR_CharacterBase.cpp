@@ -81,3 +81,19 @@ void ASR_CharacterBase::AddStatUpEffects()
 	}
 	AbilitySystemComponent->IsHasApplyStartUpEffects = true;
 }
+
+void ASR_CharacterBase::HandleDodge_Implementation(USR_AbilitySystemComponent* SourceASC, const FSRDodgeParameter& Parameter)
+{
+}
+
+void ASR_CharacterBase::HandleDamage_Implementation(USR_AbilitySystemComponent* SourceASC, const FSRDamageParameter& Parameter)
+{
+}
+
+void ASR_CharacterBase::HandleBlock_Implementation(USR_AbilitySystemComponent* SourceASC, const FSRBlockParameter& Parameter)
+{
+}
+
+void ASR_CharacterBase::HandleDeath_Implementation(USR_AbilitySystemComponent* SourceASC, const FSRDamageParameter& Parameter)
+{
+}
