@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
+#include "SR_Types.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(SRLog,Log,All);
 
@@ -31,4 +32,134 @@ enum class ESR_InputMode : uint8
 	OnlyUI,
 	OnlyGame,
 	Both
+};
+
+//可交互物体的类型
+UENUM(BlueprintType)
+enum class ESRInteractableObjType : uint8
+{
+	None,
+	//角色
+	Role,
+	//可拾取道具
+	PickUpProp,
+	//查看类道具
+	ViewableProp,
+	Other
+};
+//可交互物体的阵营
+UENUM(BlueprintType)
+enum class ESRInteractableObjCamp : uint8
+{
+	None,
+	Hero,
+	Friend,
+	Monster,
+	Prop,
+	Custom
+};
+//交互类型
+UENUM(BlueprintType)
+enum class ESRInteractType : uint8
+{
+	None,
+	Attack,
+	Touch,
+	Custom
+};
+
+
+UENUM(BlueprintType)
+enum class ESRAbilityInputID : uint8 
+{
+	None,
+	Confirm,
+	Cancel,
+	AbilityMain,
+	AbilitySecondary,
+	Ability1,
+	Ability2,
+};
+
+UENUM(BlueprintType)
+enum class ESRDamageStatus : uint8
+{
+	Normal,
+	Crit,
+	Realdamage
+
+};
+
+UENUM(BlueprintType)
+enum class ESRDamageType : uint8
+{
+	None,
+	Physics,
+	Fire,
+	Ice,
+	Poison,
+	Electricity,
+	Holy,
+	Arcane
+
+};
+
+/*
+* 伤害参数
+*/
+USTRUCT(BlueprintType)
+struct FSRDamageParameter
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "A_SR|Damage")
+	FHitResult HitResult;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "A_SR|Damage")
+	float UnmitigatedDamage = 0;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "A_SR|Damage")
+	float MitigatedDamage = 0;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "A_SR|Damage")
+	ESRDamageType Type;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "A_SR|Damage")
+	ESRDamageStatus Status;
+};
+
+/*
+* 格挡参数
+*/
+USTRUCT(BlueprintType)
+struct FSRBlockParameter
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "A_SR|Block")
+	FHitResult HitResult;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "A_SR|Block")
+	float UnmitigatedDamage = 0;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "A_SR|Block")
+	float MitigatedDamage = 0;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "A_SR|Block")
+	float BlockValue = 0;
+};
+
+/*
+* 闪避参数
+*/
+USTRUCT(BlueprintType)
+struct FSRDodgeParameter
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "A_SR|Dodge")
+	FHitResult HitResult;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "A_SR|Dodge")
+	FString ExtraInfo;
 };

@@ -32,3 +32,13 @@ void UFuncLib_Utils::SetPlayerControllerInputMode(ESR_InputMode InputMode, APlay
 		}
 	}
 }
+
+FString UFuncLib_Utils::DamageTypeToString(const ESRDamageType Type)
+{
+	return SREnumToString<ESRDamageType>("ESRDamageType", Type, true);
+}
+
+ESRDamageType UFuncLib_Utils::StringToDamageType(const FString& Name)
+{
+	return SRStringToEnum<ESRDamageType>("ESRDamageType", Name);
+}

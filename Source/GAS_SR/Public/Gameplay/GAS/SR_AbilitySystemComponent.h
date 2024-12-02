@@ -2,9 +2,14 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
+#include "Data/SR_Types.h"
 #include "SR_AbilitySystemComponent.generated.h"
 
 class USR_GameplayAbilityBase;
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnRecieveEventDodgeSignature, USR_AbilitySystemComponent*, SourceASC,
+                                             const FSRDodgeParameter&, Parameter);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnReceiveEventBlockSignature, USR_AbilitySystemComponent*, SourceASC, const FSRBlockParameter&, Parameter);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnReceiveEventDamageSignature, USR_AbilitySystemComponent*, SourceASC, const FSRDamageParameter&, Parameter);
 
 UCLASS(ClassGroup=(FH), meta=(BlueprintSpawnableComponent))
 class GAS_SR_API USR_AbilitySystemComponent : public UAbilitySystemComponent
@@ -18,6 +23,16 @@ protected:
 public:
 	bool IsHasGiveCharacterStartUpAbilities { false };
 	bool IsHasApplyStartUpEffects { false };
+
+	UPROPERTY(EditAnywhere, Category = "SR|GAS|ASC")
+	bool IsDebugLog { true };
+
+	UPROPERTY(BlueprintAssignable)
+	FOnRecieveEventDodgeSignature OnDodgeDelegate;
+	UPROPERTY(BlueprintAssignable)
+	FOnReceiveEventDamageSignature OnDamageDelegate;
+	UPROPERTY(BlueprintAssignable)
+	FOnReceiveEventBlockSignature OnBlockDelegate;
 	
 	/* Function */
 public:
@@ -51,6 +66,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="SR|GAS|ASC")
 	void UpgradeAbilityByName(const FString& AbilityName, const int32 UpLevel = 1);
+
+	void ReceiveDodge(USR_AbilitySystemComponent* SourceASC, const FSRDodgeParameter& Parameter) const;
+	void ReceiveDamage(USR_AbilitySystemComponent* SourceASC, const FSRDamageParameter& Parameter) const;
+	void ReceiveBlock(USR_AbilitySystemComponent* SourceASC, const FSRBlockParameter& Parameter) const;
 
 	// RPC
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category="SR|GAS|ASC")

@@ -1,5 +1,7 @@
 ﻿#include "GAS_SR/Public/Gameplay/GAS/SR_AbilitySystemComponent.h"
+#include "Gameplay/Character/SR_CharacterBase.h"
 #include "GAS_SR/Public/Gameplay/GAS/GA/SR_GameplayAbilityBase.h"
+#include "Utils/FuncLib_Utils.h"
 
 USR_AbilitySystemComponent::USR_AbilitySystemComponent()
 {
@@ -145,6 +147,50 @@ void USR_AbilitySystemComponent::UpgradeAbilityByName(const FString& AbilityName
 				MarkAbilitySpecDirty(Spec);
 			}
 		}
+	}
+}
+
+void USR_AbilitySystemComponent::ReceiveDodge(USR_AbilitySystemComponent* SourceASC, const FSRDodgeParameter& Parameter) const
+{
+	/*if (IsDebugLog)
+	{
+		SRLOGEX3(TEXT("%s 闪避了 %s 的攻击, 扩展参数: %s"), *GetAvatarActor()->GetName(), *SourceASC->GetAvatarActor()->GetName(),
+			*Parameter.ExtraInfo);
+	}*/
+	
+	OnDodgeDelegate.Broadcast(SourceASC, Parameter);
+	auto Role = Cast<ASR_CharacterBase>(GetAvatarActor());
+	if (Role)
+	{
+	}
+}
+
+void USR_AbilitySystemComponent::ReceiveDamage(USR_AbilitySystemComponent* SourceASC, const FSRDamageParameter& Parameter) const
+{
+	/*if (IsDebugLog)
+	{
+		SRLOGEX5(TEXT("%s 收到 %s 的 [%s] 攻击, 税前伤害 = %f, 税后= %f"), *GetAvatarActor()->GetName(), *SourceASC->GetAvatarActor()->GetName(),
+			*UFuncLib_Utils::DamageTypeToString(Parameter.Type), Parameter.UnmitigatedDamage, Parameter.MitigatedDamage);
+	}*/
+	
+	OnDamageDelegate.Broadcast(SourceASC, Parameter);
+	auto Role = Cast<ASR_CharacterBase>(GetAvatarActor());
+	if (Role)
+	{
+	}
+}
+
+void USR_AbilitySystemComponent::ReceiveBlock(USR_AbilitySystemComponent* SourceASC, const FSRBlockParameter& Parameter) const
+{
+	/*if (IsDebugLog)
+	{
+		SRLOGEX4(TEXT("%s 格挡了 %s 攻击的 %f 点伤害(格挡前伤害= %f)"), *GetAvatarActor()->GetName(), *SourceASC->GetAvatarActor()->GetName(), Parameter.BlockValue, Parameter.UnmitigatedDamage);
+	}*/
+	
+	OnBlockDelegate.Broadcast(SourceASC, Parameter);
+	auto Role = Cast<ASR_CharacterBase>(GetAvatarActor());
+	if (Role)
+	{
 	}
 }
 
