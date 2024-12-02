@@ -71,7 +71,7 @@ void USR_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 
 		if (IsAnyDamage(Data.EvaluatedData.Attribute))
 		{
-			//HandleDamage(Data.EvaluatedData.Attribute, TargetCharacter);
+			HandleDamage(Data.EvaluatedData.Attribute, TargetCharacter);
 		}
 	}
 }
@@ -100,16 +100,16 @@ void USR_AttributeSet::HandleSecondaryAttributeChanged(const FGameplayAttribute&
 	}
 }
 
-/*void USR_AttributeSet::HandleDamage(const FGameplayAttribute& Attribute, ASR_CharacterBase* TargetCharacter)
+void USR_AttributeSet::HandleDamage(const FGameplayAttribute& Attribute, ASR_CharacterBase* TargetCharacter)
 {
 	float Damage;
 	float NewHp;
 	DAMAGE_HANDLE(Attribute, TargetCharacter, Physics, Damage, NewHp);
 	DAMAGE_HANDLE(Attribute, TargetCharacter, Fire, Damage, NewHp);
 	DAMAGE_HANDLE(Attribute, TargetCharacter, Ice, Damage, NewHp);
-}*/
+}
 
-bool USR_AttributeSet::IsAnyDamage(const FGameplayAttribute& Attribute) const
+bool USR_AttributeSet::IsAnyDamage(const FGameplayAttribute& Attribute)
 {
 	return Attribute == GetDamage_FireAttribute() ||
 			Attribute == GetDamage_IceAttribute() ||

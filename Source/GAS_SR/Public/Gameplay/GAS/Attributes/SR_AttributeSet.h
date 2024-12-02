@@ -176,8 +176,8 @@ protected:
 	void AdjustAttributeForMaxChange(const FGameplayAttributeData& AffectedAttribute, const FGameplayAttributeData& MaxAttribute, float NewMaxValue, const FGameplayAttribute& AffectedAttributeProperty) const;
 	void HandleSecondaryAttributeChanged(const FGameplayAttribute& Attribute);
 
-	//void HandleDamage(const FGameplayAttribute& Attribute, ASR_CharacterBase* TargetCharacter);
-	bool IsAnyDamage(const FGameplayAttribute& Attribute)const;
+	void HandleDamage(const FGameplayAttribute& Attribute, ASR_CharacterBase* TargetCharacter);
+	static bool IsAnyDamage(const FGameplayAttribute& Attribute);
 	
 	// Attribute OnRep
 protected:
