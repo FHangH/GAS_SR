@@ -14,13 +14,13 @@ class GAS_SR_API UFuncLib_Utils : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, Category="SR|FuncLib")
+	UFUNCTION(BlueprintCallable, Category="A_SR|FuncLib|Controller")
 	static void SetPlayerControllerInputMode(ESR_InputMode InputMode, APlayerController* PlayerController, const bool IsShowMouse);
 
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "SR|Lib|Data")
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "A_SR|FuncLib|Data")
 	static FString DamageTypeToString(ESRDamageType Type);
 	
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "SR|Lib|Data")
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "A_SR|FuncLib|Data")
 	static ESRDamageType StringToDamageType(const FString& Name);
 
 	template<typename TEnum>
