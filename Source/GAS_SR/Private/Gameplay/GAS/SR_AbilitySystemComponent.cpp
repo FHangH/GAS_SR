@@ -179,6 +179,7 @@ void USR_AbilitySystemComponent::ReceiveDamage(USR_AbilitySystemComponent* Sourc
 	if (Role)
 	{
 		Role->HandleDamage(SourceASC, Parameter);
+
 		if (!Role->IsAlive())
 		{
 			Role->HandleDeath(SourceASC, Parameter);
@@ -199,6 +200,21 @@ void USR_AbilitySystemComponent::ReceiveBlock(USR_AbilitySystemComponent* Source
 	{
 		Role->HandleBlock(SourceASC, Parameter);
 	}
+}
+
+void USR_AbilitySystemComponent::BP_ExecuteGameplayCue(const FGameplayTag& GameplayCueTag, const FGameplayCueParameters& GameplayCueParameters)
+{
+	ExecuteGameplayCue(GameplayCueTag,GameplayCueParameters);
+}
+
+void USR_AbilitySystemComponent::BP_RemoveGameplayCue(const FGameplayTag& GameplayCueTag)
+{
+	RemoveGameplayCue(GameplayCueTag);
+}
+
+void USR_AbilitySystemComponent::BP_AddGameplayCue(const FGameplayTag& GameplayCueTag, const FGameplayCueParameters& GameplayCueParameters)
+{
+	AddGameplayCue(GameplayCueTag,GameplayCueParameters);
 }
 
 void USR_AbilitySystemComponent::Server_AddNewAbility_Implementation(const TSubclassOf<USR_GameplayAbilityBase> AbilityClass, const int32 Level)

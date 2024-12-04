@@ -71,6 +71,15 @@ public:
 	void ReceiveDamage(USR_AbilitySystemComponent* SourceASC, const FSRDamageParameter& Parameter) const;
 	void ReceiveBlock(USR_AbilitySystemComponent* SourceASC, const FSRBlockParameter& Parameter) const;
 
+	UFUNCTION(BlueprintCallable, Category = "SR|GAS|ASC", meta = (AutoCreateRefTerm = "GameplayCueTag, GameplayCueParameters"), DisplayName = "ExecuteGameplayCue")
+	void BP_ExecuteGameplayCue(const FGameplayTag& GameplayCueTag, const FGameplayCueParameters& GameplayCueParameters);
+
+	UFUNCTION(BlueprintCallable, Category = "SR|GAS|ASC", meta = (AutoCreateRefTerm = "GameplayCueTag, GameplayCueParameters"), DisplayName = "RemoveGameplayCue")
+	void BP_RemoveGameplayCue(const FGameplayTag& GameplayCueTag);
+
+	UFUNCTION(BlueprintCallable, Category = "SR|GAS|ASC", meta = (AutoCreateRefTerm = "GameplayCueTag, GameplayCueParameters"), DisplayName = "AddGameplayCue")
+	void BP_AddGameplayCue(const FGameplayTag& GameplayCueTag, const FGameplayCueParameters& GameplayCueParameters);
+
 	// RPC
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category="SR|GAS|ASC")
 	void Server_AddNewAbility(TSubclassOf<USR_GameplayAbilityBase> AbilityClass, const int32 Level);

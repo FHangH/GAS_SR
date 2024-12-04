@@ -64,7 +64,7 @@ public:
 	void HandleDeath(USR_AbilitySystemComponent* SourceASC, const FSRDamageParameter& Parameter);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Status")
-	FORCEINLINE bool IsAlive() const { return GetHealth() > 0; }
+	FORCEINLINE bool IsAlive() const { return GetHealth() > 0.f; }
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Attribute")
 	FORCEINLINE float GetHealth() const { return AttributeSet ? AttributeSet->GetHealth() : 0.f; }
